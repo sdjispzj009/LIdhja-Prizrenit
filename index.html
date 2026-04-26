@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="sq">
 <head>
@@ -35,6 +34,2068 @@
     html { scroll-behavior: smooth; font-size: 16px; }
     body {
       background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    /* Offset për navbar-in fixed (70px lartësi) */
+    section { scroll-margin-top: 70px; }
+
+    /* ============================================================
+       SCROLL PROGRESS BAR
+    ============================================================ */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(13,13,13,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,16,46,0.2);
+      transition: padding 0.3s var(--ease);
+    }
+    nav.scrolled { padding: 0.6rem 2.5rem; }
+    .nav-logo {
+      font-family: var(--font-head);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--font-head);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+      transition: color 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--red);
+      transition: width 0.3s var(--ease);
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; }
+    .hamburger span { display: block; width: 26px; height: 2px; background: var(--white); transition: 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: var(--dark);
+        padding: 1.5rem 2rem;
+        gap: 1.2rem;
+        border-bottom: 1px solid var(--red);
+      }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    #home {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 8rem 1.5rem 4rem;
+    }
+
+    /* Animated background: diagonal stripes + noise */
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(
+          -55deg,
+          rgba(200,16,46,0.04) 0px,
+          rgba(200,16,46,0.04) 1px,
+          transparent 1px,
+          transparent 40px
+        ),
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(200,16,46,0.12) 0%, transparent 70%),
+        var(--black);
+      animation: bgPulse 8s ease-in-out infinite alternate;
+    }
+    @keyframes bgPulse {
+      from { opacity: 0.8; }
+      to   { opacity: 1; }
+    }
+
+    /* Eagle silhouette */
+    .hero-eagle {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-55%);
+      width: min(500px, 80vw);
+      opacity: 0.04;
+      pointer-events: none;
+      animation: eaglePulse 6s ease-in-out infinite;
+    }
+    @keyframes eaglePulse {
+      0%,100% { opacity: 0.04; transform: translate(-50%,-55%) scale(1); }
+      50%      { opacity: 0.07; transform: translate(-50%,-55%) scale(1.03); }
+    }
+
+    .hero-content { position: relative; z-index: 2; max-width: 820px; }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red);
+      border: 1px solid rgba(200,16,46,0.4);
+      padding: 0.35rem 1.1rem;
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeDown 0.8s 0.3s var(--ease) forwards;
+    }
+
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(2.4rem, 7vw, 6rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 1s 0.6s var(--ease) forwards;
+    }
+    .hero-title .accent { color: var(--red); }
+    .hero-title .gold   { color: var(--gold); }
+
+    .hero-divider {
+      width: 80px; height: 2px;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      margin: 1.6rem auto;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.9s var(--ease) forwards;
+    }
+
+    .hero-text {
+      font-size: 1.1rem;
+      color: var(--gray);
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 1.1s var(--ease) forwards;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      font-family: var(--font-head);
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--red);
+      padding: 0.85rem 2.4rem;
+      border: 1px solid var(--red);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s, background 0.3s, box-shadow 0.3s;
+      opacity: 0;
+      animation: fadeUp 0.8s 1.3s var(--ease) forwards;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: translateX(-101%);
+      transition: transform 0.35s var(--ease);
+    }
+    .btn-primary:hover { color: var(--black); box-shadow: 0 0 24px var(--red-glow); }
+    .btn-primary:hover::before { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+
+    /* ============================================================
+       KEYFRAMES
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ============================================================
+       SCROLL-REVEAL (JS adds .revealed)
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+    .reveal-left.revealed { opacity: 1; transform: translateX(0); }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+    .reveal-right.revealed { opacity: 1; transform: translateX(0); }
+
+    /* ============================================================
+       SECTION COMMON
+    ============================================================ */
+    section { padding: 6rem 1.5rem; position: relative; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.7rem;
+    }
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+    .section-title .gold { color: var(--gold); }
+    .section-lead {
+      font-size: 1.05rem;
+      color: var(--gray);
+      max-width: 640px;
+      margin-bottom: 3rem;
+    }
+
+    /* Decorative line */
+    .deco-line {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .deco-line::before, .deco-line::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,16,46,0.4), transparent);
+    }
+    .deco-line span {
+      font-family: var(--font-head);
+      font-size: 1.3rem;
+      color: var(--red);
+    }
+
+    /* ============================================================
+       RILINDJA SECTION
+    ============================================================ */
+    #rilindja { background: var(--dark); }
+    #rilindja .section-inner { display: grid; gap: 3rem; }
+
+    .rilindja-intro { max-width: 700px; }
+    .rilindja-intro p { margin-bottom: 1rem; color: rgba(245,240,232,0.85); }
+
+    /* Cards grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 4px;
+      padding: 1.8rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease);
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px var(--red);
+      border-color: var(--red);
+    }
+    .card:hover::before { transform: scaleX(1); }
+
+    .card-year {
+      font-family: var(--font-head);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .card-name {
+      font-family: var(--font-head);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+    .card-role {
+      font-size: 0.85rem;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+      font-style: italic;
+    }
+    .card-desc { font-size: 0.9rem; color: var(--gray); }
+
+    .card-icon {
+      position: absolute;
+      bottom: 1rem; right: 1.2rem;
+      font-size: 2.5rem;
+      opacity: 0.06;
+      transition: opacity 0.35s;
+    }
+    .card:hover .card-icon { opacity: 0.12; }
+
+    /* ============================================================
+       LIDHJA E PRIZRENIT
+    ============================================================ */
+    #lidhja { background: var(--black); }
+
+    .lidhja-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .lidhja-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .lidhja-text p { color: rgba(245,240,232,0.82); margin-bottom: 1rem; }
+
+    /* Accordion */
+    .accordion {
+      background: var(--dark2);
+      border: 1px solid rgba(200,16,46,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .accordion-item { border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .accordion-item:last-child { border-bottom: none; }
+    .accordion-btn {
+      width: 100%;
+      text-align: left;
+      padding: 1.1rem 1.4rem;
+      font-family: var(--font-head);
+      font-size: 0.92rem;
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.25s, color 0.25s;
+    }
+    .accordion-btn:hover { background: rgba(200,16,46,0.08); color: var(--gold); }
+    .accordion-btn.active { color: var(--gold); background: rgba(200,16,46,0.1); }
+    .accordion-icon {
+      font-size: 1.2rem;
+      transition: transform 0.35s var(--ease);
+      color: var(--red);
+    }
+    .accordion-btn.active .accordion-icon { transform: rotate(45deg); }
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s var(--ease), padding 0.3s;
+    }
+    .accordion-body.open { max-height: 400px; }
+    .accordion-body-inner {
+      padding: 0 1.4rem 1.2rem;
+      font-size: 0.92rem;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       TIMELINE
+    ============================================================ */
+    #timeline { background: var(--dark); }
+
+    .timeline {
+      position: relative;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 28px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--red), var(--gold), var(--red));
+    }
+    @media (max-width: 600px) {
+      .timeline::before { left: 18px; }
+    }
+
+    .tl-item {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 3.5rem;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .tl-dot {
+      flex-shrink: 0;
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      background: var(--dark3);
+      border: 2px solid var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-head);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 0.05em;
+      z-index: 1;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+      position: relative;
+    }
+    .tl-item:hover .tl-dot,
+    .tl-item.active .tl-dot {
+      background: var(--red);
+      color: var(--white);
+      box-shadow: 0 0 20px var(--red-glow);
+      transform: scale(1.1);
+    }
+
+    .tl-content { flex: 1; padding-top: 0.3rem; }
+    .tl-year {
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 0.2rem;
+    }
+    .tl-title {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .tl-short { font-size: 0.9rem; color: var(--gray); }
+
+    /* Expand panel */
+    .tl-expand {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s var(--ease);
+    }
+    .tl-expand.open { max-height: 300px; }
+    .tl-expand-inner {
+      background: var(--dark3);
+      border-left: 3px solid var(--red);
+      padding: 1rem 1.2rem;
+      margin-top: 0.8rem;
+      border-radius: 0 4px 4px 0;
+      font-size: 0.92rem;
+      color: rgba(245,240,232,0.8);
+    }
+
+    @media (max-width: 600px) {
+      .tl-dot { width: 38px; height: 38px; font-size: 0.55rem; }
+      .tl-item { gap: 1rem; }
+    }
+
+    /* ============================================================
+       GALLERY
+    ============================================================ */
+    #galeria { background: var(--black); }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      border-radius: 3px;
+      cursor: pointer;
+      background: var(--dark2);
+    }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s var(--ease), filter 0.4s;
+      filter: grayscale(30%) brightness(0.8);
+    }
+    .gallery-item:hover img {
+      transform: scale(1.08);
+      filter: grayscale(0%) brightness(1);
+    }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-caption {
+      font-family: var(--font-head);
+      font-size: 0.8rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      animation: fadeIn 0.3s;
+    }
+    .modal.open { display: flex; }
+    .modal-box {
+      position: relative;
+      max-width: 820px;
+      width: 100%;
+      background: var(--dark2);
+      border: 1px solid rgba(200,16,46,0.3);
+      border-radius: 4px;
+      overflow: hidden;
+      animation: fadeUp 0.35s var(--ease);
+    }
+    .modal-box img { width: 100%; max-height: 65vh; object-fit: cover; }
+    .modal-info {
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title {
+      font-family: var(--font-head);
+      font-size: 1.05rem;
+      color: var(--white);
+    }
+    .modal-subtitle { font-size: 0.85rem; color: var(--gray); margin-top: 0.15rem; }
+    .modal-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--dark3);
+      color: var(--white);
+      font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.25s;
+    }
+    .modal-close:hover { background: var(--red); }
+
+    /* ============================================================
+       QUIZ
+    ============================================================ */
+    #quiz { background: var(--dark); }
+
+    .quiz-box {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .quiz-progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .quiz-progress-bar {
+      flex: 1;
+      height: 4px;
+      background: var(--dark3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      transition: width 0.4s var(--ease);
+    }
+    .quiz-progress-label {
+      font-family: var(--font-head);
+      font-size: 0.8rem;
+      color: var(--gray);
+      white-space: nowrap;
+    }
+
+    .quiz-question-wrap {
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 2rem;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+    }
+    .quiz-q-num {
+      font-family: var(--font-head);
+      font-size: 0.7rem;
+      color: var(--red);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    .quiz-q-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 1.6rem;
+      flex: 1;
+    }
+    .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    @media (max-width: 500px) { .quiz-options { grid-template-columns: 1fr; } }
+
+    .quiz-opt {
+      padding: 0.75rem 1rem;
+      background: var(--dark3);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 4px;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      text-align: left;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+    .quiz-opt:hover:not(:disabled) {
+      background: rgba(200,16,46,0.15);
+      border-color: var(--red);
+      transform: translateX(4px);
+    }
+    .quiz-opt.correct {
+      background: rgba(50,160,80,0.25);
+      border-color: #3da05a;
+      color: #7ae09a;
+    }
+    .quiz-opt.wrong {
+      background: rgba(200,16,46,0.25);
+      border-color: var(--red);
+      color: #ff7a8a;
+    }
+    .quiz-opt:disabled { cursor: not-allowed; }
+
+    .quiz-feedback {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      min-height: 1.4rem;
+      color: var(--gray);
+      font-style: italic;
+    }
+
+    .quiz-nav {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+    .btn-next {
+      font-family: var(--font-head);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--dark3);
+      border: 1px solid rgba(200,16,46,0.4);
+      padding: 0.65rem 1.8rem;
+      border-radius: 2px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .btn-next:hover { background: var(--red); border-color: var(--red); }
+
+    /* Result */
+    .quiz-result {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 2.5rem;
+      animation: fadeUp 0.6s var(--ease);
+    }
+    .quiz-result.show { display: flex; }
+    .result-score {
+      font-family: var(--font-head);
+      font-size: 5rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .result-label {
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .result-msg { color: var(--gray); margin-bottom: 2rem; }
+    .btn-retry {
+      font-family: var(--font-head);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--red);
+      border: 1px solid var(--red);
+      padding: 0.7rem 2rem;
+      border-radius: 2px;
+      transition: background 0.25s, box-shadow 0.25s;
+    }
+    .btn-retry:hover { background: var(--red-dark); box-shadow: 0 0 20px var(--red-glow); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: var(--dark);
+      border-top: 1px solid rgba(200,16,46,0.15);
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+    .footer-eagle {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: eaglePulse 4s ease-in-out infinite;
+    }
+    .footer-title {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      margin-bottom: 0.4rem;
+    }
+    .footer-sub { font-size: 0.85rem; color: var(--gray); margin-bottom: 1.5rem; }
+    .footer-divider {
+      width: 60px; height: 1px;
+      background: rgba(200,16,46,0.4);
+      margin: 0 auto 1.2rem;
+    }
+    .footer-author { font-size: 0.82rem; color: rgba(160,144,128,0.6); }
+    .footer-author span { color: var(--red); }
+
+    /* ============================================================
+       BACK TO TOP
+    ============================================================ */
+    #back-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--red);
+      color: var(--white);
+      font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(200,16,46,0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 800;
+    }
+    #back-top.visible { opacity: 1; pointer-events: all; }
+    #back-top:hover { transform: translateY(-3px); }
+
+    /* ============================================================
+       GALLERY PLACEHOLDER IMAGES (SVG data URIs)
+    ============================================================ */
+    /* handled via JS */
+
+    /* ============================================================
+       FIGURES SECTION
+    ============================================================ */
+    #figures { background: var(--dark); }
+
+    /* Category tabs */
+    .fig-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 2.5rem;
+    }
+    .fig-tab {
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 2px;
+      color: var(--gray);
+      background: var(--dark3);
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+    }
+    .fig-tab:hover  { color: var(--white); border-color: rgba(200,16,46,0.4); }
+    .fig-tab.active { background: var(--red); color: var(--white); border-color: var(--red); }
+
+    /* Figure cards grid */
+    .fig-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1.3rem;
+    }
+
+    /* Individual figure card */
+    .fig-card {
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 4px;
+      padding: 1.5rem 1.4rem 1.3rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.32s var(--ease), box-shadow 0.32s var(--ease), border-color 0.32s;
+      display: none; /* shown by JS per active tab */
+    }
+    .fig-card.visible { display: block; }
+    .fig-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s var(--ease);
+    }
+    .fig-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(200,16,46,0.3);
+      border-color: rgba(200,16,46,0.3);
+    }
+    .fig-card:hover::after { transform: scaleX(1); }
+
+    .fig-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--red-dark), var(--dark3));
+      border: 2px solid rgba(200,16,46,0.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .fig-name {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.25rem;
+      line-height: 1.2;
+    }
+    .fig-role {
+      font-size: 0.78rem;
+      color: var(--gold);
+      font-style: italic;
+      margin-bottom: 0.7rem;
+    }
+    .fig-desc {
+      font-size: 0.88rem;
+      color: var(--gray);
+      line-height: 1.65;
+    }
+    .fig-cat-badge {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      font-family: var(--font-head);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      opacity: 0.7;
+    }
+
+    /* Timeline dot label — smaller font for 4-char years */
+    .tl-dot { font-size: 0.62rem; }
+
+    /* Smoother expand transition */
+    .tl-expand {
+      transition: max-height 0.55s cubic-bezier(0.4,0,0.2,1),
+                  opacity 0.4s ease;
+      opacity: 0;
+    }
+    .tl-expand.open { opacity: 1; }
+
+  </style>
+</head>
+<body>
+
+<!-- Scroll progress bar -->
+<div id="progress-bar"></div>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<nav id="navbar">
+  <div class="nav-logo">🦅 <span>AL</span>BANIA</div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#home">Kreu</a></li>
+    <li><a href="#rilindja">Rilindja</a></li>
+    <li><a href="#lidhja">Lidhja</a></li>
+    <li><a href="#timeline">Kronologji</a></li>
+    <li><a href="#figures">Figurat</a></li>
+    <li><a href="#galeria">Galeria</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ============================================================
+     1. HOME
+============================================================ -->
+<section id="home">
+  <div class="hero-bg"></div>
+
+  <!-- Eagle SVG silhouette -->
+  <svg class="hero-eagle" viewBox="0 0 200 160" fill="currentColor" color="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M100 10 C85 25 60 20 40 35 C20 50 10 70 15 85 C20 100 35 95 50 90
+             C55 88 58 85 60 88 C62 91 60 96 65 98 C70 100 75 95 80 97
+             C85 99 88 105 92 106 C96 107 100 103 100 103
+             C100 103 104 107 108 106 C112 105 115 99 120 97
+             C125 95 130 100 135 98 C140 96 138 91 140 88
+             C142 85 145 88 150 90 C165 95 180 100 185 85
+             C190 70 180 50 160 35 C140 20 115 25 100 10 Z"/>
+    <ellipse cx="100" cy="120" rx="12" ry="20"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-badge">Historia e Popullit Shqiptar</div>
+    <h1 class="hero-title">
+      Rilindja<br/>
+      <span class="gold">Kombëtare</span><br/>
+      <span class="accent">Shqiptare</span>
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-text">
+      Periudha e madhe e zgjimit kombëtar, luftës për liri dhe formimit
+      të identitetit të pavarur shqiptar — nga Lidhja e Prizrenit deri tek
+      Pavarësia e 1912.
+    </p>
+    <a href="#rilindja" class="btn-primary"><span>Mëso Më Shumë ↓</span></a>
+  </div>
+</section>
+
+<!-- ============================================================
+     2. RILINDJA KOMBËTARE
+============================================================ -->
+<section id="rilindja">
+  <div class="section-inner">
+
+    <div class="reveal">
+      <p class="section-label">Seksioni I</p>
+      <h2 class="section-title">Rilindja <span class="gold">Kombëtare</span></h2>
+      <p class="section-lead">
+        Lëvizja kulturore, politike dhe letrare që transformoi kombin shqiptar
+        gjatë shekujve XVIII–XX.
+      </p>
+    </div>
+
+    <div class="deco-line reveal"><span>✦</span></div>
+
+    <div class="rilindja-intro reveal">
+      <p>
+        <strong>Rilindja Kombëtare Shqiptare</strong> (ose thjesht <em>Rilindja</em>) është
+        periudha e lëvizjes kombëtare shqiptare, e cila filloi rreth fundit të shekullit XVIII
+        dhe arriti kulmin e saj gjatë shekullit XIX. Ajo u karakterizua nga zhvillimi i
+        literaturës dhe gjuhës shqipe, krijimi i shkollave dhe institucioneve kulturore, si
+        dhe ndërgjegjësimi kombëtar mes shqiptarëve nën sundimin osman.
+      </p>
+      <p>
+        Kjo periudhë shënoi kalimin nga identiteti fetar (mysliman, ortodoks, katolik) tek
+        uniteti kombëtar, duke u mbështetur në parimin e famshëm: <em>"Feja e shqiptarit
+        është shqiptaria."</em>
+      </p>
+      <p>
+        Figurat kryesore të Rilindjes kombinuan veprën letrare me aktivizmin politik,
+        duke krijuar bazat ideologjike të shtetit shqiptar modern.
+      </p>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards-grid">
+
+      <div class="card reveal" style="transition-delay:0.1s">
+        <div class="card-year">1820–1882</div>
+        <div class="card-name">Naim Frashëri</div>
+        <div class="card-role">Poet Kombëtar</div>
+        <p class="card-desc">Poeti i madh i Rilindjes, autor i "Bagëti e Bujqësia" dhe "Histori e Skënderbeut". Vëllai i Sami dhe Abdyl Frashërit.</p>
+        <div class="card-icon">✍</div>
+      </div>
+
+      <div class="card reveal" style="transition-delay:0.2s">
+        <div class="card-year">1850–1904</div>
+        <div class="card-name">Sami Frashëri</div>
+        <div class="card-role">Mendimtar & Gjuhëtar</div>
+        <p class="card-desc">Autor i "Shqipëria — ç'ka qenë, ç'është e ç'do të bëhetë", vepër themelore e programit kombëtar shqiptar.</p>
+        <div class="card-icon">📖</div>
+      </div>
+
+      <div class="card reveal" style="transition-delay:0.3s">
+        <div class="card-year">1839–1892</div>
+        <div class="card-name">Abdyl Frashëri</div>
+        <div class="card-role">Diplomat & Lider Politik</div>
+        <p class="card-desc">Udhëheqës kryesor i Lidhjes së Prizrenit dhe diplomati i madh i çështjes shqiptare para fuqive evropiane.</p>
+        <div class="card-icon">🌍</div>
+      </div>
+
+      <div class="card reveal" style="transition-delay:0.4s">
+        <div class="card-year">1846–1900</div>
+        <div class="card-name">Jeronim de Rada</div>
+        <div class="card-role">Poet Arbëresh</div>
+        <p class="card-desc">Poet i komuniteteve arbëreshe të Italisë, pionier i letërsisë romantike shqiptare dhe i revistave kombëtare.</p>
+        <div class="card-icon">🌺</div>
+      </div>
+
+      <div class="card reveal" style="transition-delay:0.5s">
+        <div class="card-year">1854–1935</div>
+        <div class="card-name">Gjergj Fishta</div>
+        <div class="card-role">Prift & Poet Epik</div>
+        <p class="card-desc">Autor i eposit "Lahuta e Malsisë", vepra më e madhe e letërsisë shqipe. Luftëtar i çështjes kombëtare.</p>
+        <div class="card-icon">⚔</div>
+      </div>
+
+      <div class="card reveal" style="transition-delay:0.6s">
+        <div class="card-year">1856–1935</div>
+        <div class="card-name">Faik Konica</div>
+        <div class="card-role">Publicist & Diplomat</div>
+        <p class="card-desc">Themelues i revistës "Albania" në Bruksel, ndër diplomatët e parë shqiptarë dhe formësues i shtypit kombëtar.</p>
+        <div class="card-icon">📰</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     3. LIDHJA E PRIZRENIT
+============================================================ -->
+<section id="lidhja">
+  <div class="section-inner">
+
+    <div class="reveal">
+      <p class="section-label">Seksioni II</p>
+      <h2 class="section-title">Lidhja e <span class="gold">Prizrenit</span></h2>
+      <p class="section-lead">
+        Organizata e parë politike kombëtare shqiptare (1878–1881) — simbol
+        i bashkimit dhe rezistencës kundër ndarjes së trojeve shqiptare.
+      </p>
+    </div>
+
+    <div class="lidhja-layout">
+
+      <!-- Tekst -->
+      <div class="lidhja-text reveal-left">
+        <p>
+          Më <strong>10 qershor 1878</strong>, në qytetin e Prizrenit, drejtues shqiptarë
+          nga të katër vilajet (Shkodër, Kosovë, Manastir, Janinë) themeluan
+          <strong>Lidhjen Shqiptare të Prizrenit</strong> — organizatën e parë politike
+          kombëtare të shqiptarëve.
+        </p>
+        <p>
+          Lidhja u krijua si reagim ndaj <em>Traktatit të San Stefanos</em> (mars 1878)
+          dhe <em>Kongresit të Berlinit</em> (qershor–korrik 1878), që i ndanin tokat
+          shqiptare midis Serbisë, Malit të Zi dhe Greqisë pa marrë parasysh
+          popullsinë vendase.
+        </p>
+        <p>
+          Nën udhëheqjen e <strong>Abdyl Frashërit</strong>, Lidhja parashtroi kërkesa
+          për autonomi brenda Perandorisë Osmane, duke formuar një qeveri të pavarur
+          faktike dhe duke organizuar rezistencën e armatosur kundër copëtimit të
+          territoreve shqiptare.
+        </p>
+      </div>
+
+      <!-- Accordion -->
+      <div class="accordion reveal-right">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAccordion(this)">
+            Qëllimet e Lidhjes
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              Lidhja kishte dy qëllime kryesore: (1) të kundërshtonte ndarjen e trojeve
+              shqiptare midis vendeve fqinje, dhe (2) të fitonte autonominë administrative
+              për vilajetin e bashkuar shqiptar brenda Perandorisë Osmane. Programi
+              shtetëror parashikonte gjyqësi, shkolla dhe administratë në gjuhën shqipe.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAccordion(this)">
+            Beteja e Hotit dhe Grudës (1879–1880)
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              Kur fuqitë e mëdha i detyruan Perandorinë Osmane t'i jepte Malit të Zi
+              rrethin e Hotit dhe Grudës, forcat e Lidhjes u ndeshën drejtpërdrejt me
+              ushtrinë osmane. Kryengritja u shtyp me forcë në prill 1881 nga marshali
+              Dervish Pasha, dhe shumë drejtues u kapën ose u dëbuan.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAccordion(this)">
+            Rëndësia Historike
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              Edhe pse u shtyp ushtarakisht, Lidhja e Prizrenit la trashëgimi të
+              paçmuar: ngjalli ndërgjegjësimin kombëtar, demonstroi unitetin
+              shqiptar mbi kufijtë fetarë dhe gjeografikë, dhe bëri të qartë
+              nevojën për shtetin shqiptar — çka u realizua 34 vjet më vonë, më 1912.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAccordion(this)">
+            Trashëgimia Kulturore
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              Lidhja frymëzoi brezat pasues të aktivistëve kulturorë dhe politikë.
+              Sot, data 10 qershor shënohet si Dita e Lidhjes së Prizrenit. Muzetë
+              dhe institucionet kulturore në Kosovë dhe Shqipëri ruajnë dokumentet
+              origjinale dhe simbolet e kësaj organizate historike.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     4. TIMELINE
+============================================================ -->
+<section id="timeline">
+  <div class="section-inner">
+
+    <div class="reveal" style="margin-bottom: 3rem;">
+      <p class="section-label">Kronologji</p>
+      <h2 class="section-title">Ngjarjet <span class="gold">Historike</span></h2>
+      <p class="section-lead">Klikoni mbi çdo ngjarje për të mësuar më shumë.</p>
+    </div>
+
+    <div class="timeline">
+
+      <!-- 1878 — Lidhja e Prizrenit -->
+      <div class="tl-item reveal" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1878</div>
+        <div class="tl-content">
+          <div class="tl-year">1878</div>
+          <div class="tl-title">Lidhja e Prizrenit</div>
+          <div class="tl-short">Organizata e parë politike kombëtare shqiptare.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Themeluar më 10 qershor 1878 në Prizren, Lidhja u organizua për të mbrojtur
+              tokat shqiptare dhe për të kërkuar autonomi pas Kongresit të Berlinit, i cili
+              rrezikonte t'u jepte viset shqiptare fqinjëve. U bë qeveria faktike e
+              shqiptarëve deri në shpërbërjen e saj me forcë në prill 1881.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1878 — Kuvendi i Dibrës -->
+      <div class="tl-item reveal" style="transition-delay:0.08s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1878</div>
+        <div class="tl-content">
+          <div class="tl-year">1878</div>
+          <div class="tl-title">Kuvendi i Dibrës</div>
+          <div class="tl-short">Mbështetje për unitetin kombëtar.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Kuvendi i Dibrës (1878) forcoi vendimet e Lidhjes së Prizrenit dhe tregoi
+              bashkimin e shqiptarëve nga rajonet veriore. Ky kuvendim demonstroi se
+              lëvizja kombëtare ishte e përhapur në të gjitha trevat shqiptare, jo vetëm
+              në Prizren.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1899 — Lidhja e Pejës -->
+      <div class="tl-item reveal" style="transition-delay:0.16s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1899</div>
+        <div class="tl-content">
+          <div class="tl-year">1899</div>
+          <div class="tl-title">Lidhja e Pejës</div>
+          <div class="tl-short">Përpjekje për autonomi shqiptare.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              E udhëhequr nga patriotë shqiptarë si Haxhi Zeka, Lidhja e Pejës
+              (1899) vijoi lëvizjen kombëtare duke kërkuar autonominë administrative.
+              Fuqia osmane e shtypi organizatën, por ajo la trashëgimi të rëndësishme
+              për brezat pasues të aktivistëve.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1908 — Kongresi i Manastirit -->
+      <div class="tl-item reveal" style="transition-delay:0.24s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1908</div>
+        <div class="tl-content">
+          <div class="tl-year">1908</div>
+          <div class="tl-title">Kongresi i Manastirit</div>
+          <div class="tl-short">Standardizimi i alfabetit shqip.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Kongresi i Manastirit (14–22 nëntor 1908) bashkoi intelektualët kryesorë
+              shqiptarë dhe vendosi alfabetin latin si standard kombëtar të gjuhës shqipe,
+              duke zëvendësuar variantet e shumta që ekzistonin deri atëherë. Ky vendim
+              ndihmoi unifikimin kulturor dhe arsimor të kombit.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1909 — Kongresi i Dibrës -->
+      <div class="tl-item reveal" style="transition-delay:0.32s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1909</div>
+        <div class="tl-content">
+          <div class="tl-year">1909</div>
+          <div class="tl-title">Kongresi i Dibrës</div>
+          <div class="tl-short">Të drejta politike dhe zgjerim i arsimit.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Kongresi i Dibrës (1909) u fokusua në të drejtat politike të shqiptarëve
+              brenda Perandorisë Osmane dhe kërkoi zgjerimin e arsimit në gjuhën shqipe.
+              U koordinua me lëvizjet e tjera kombëtare dhe forcoi rrjetin e
+              organizatave shqiptare.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1909 — Kongresi i Elbasanit -->
+      <div class="tl-item reveal" style="transition-delay:0.40s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1909</div>
+        <div class="tl-content">
+          <div class="tl-year">1909</div>
+          <div class="tl-title">Kongresi i Elbasanit</div>
+          <div class="tl-short">Zhvillimi i arsimit kombëtar.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Kongresi i Elbasanit (1909) çoi në hapjen e Shkollës Normale të Elbasanit —
+              institucioni i parë shqiptar për formimin e mësuesve. Kjo shkollë u bë
+              vatër e rëndësishme e kulturës kombëtare dhe formoi brezin e parë të
+              mësuesve në gjuhën shqipe.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1910 — Kongresi II i Manastirit -->
+      <div class="tl-item reveal" style="transition-delay:0.48s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1910</div>
+        <div class="tl-content">
+          <div class="tl-year">1910</div>
+          <div class="tl-title">Kongresi i Dytë i Manastirit</div>
+          <div class="tl-short">Mbrojtja dhe promovimi i alfabetit të unifikuar.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Kongresi i Dytë i Manastirit (1910) u mbajt për të mbrojtur dhe konsoliduar
+              alfabetin e unifikuar shqip të vendosur në 1908. Nën presionin e autoriteteve
+              osmane, delegatët riafirmuan angazhimin ndaj standardit latin dhe zgjerimin
+              e botimeve në gjuhën shqipe.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1911 — Kuvendi i Greçës -->
+      <div class="tl-item reveal" style="transition-delay:0.56s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1911</div>
+        <div class="tl-content">
+          <div class="tl-year">1911</div>
+          <div class="tl-title">Kuvendi i Greçës</div>
+          <div class="tl-short">Kërkesa për autonomi — Memorandumi i Greçës.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Kuvendi i Greçës (1911) prodhoi <em>Memorandumin e Greçës</em>, dokument
+              politik me kërkesa konkrete ndaj Portës së Lartë: autonomi administrative,
+              shkolla shqipe, dhe zyrtarë vendas. Ishte hap i rëndësishëm drejt
+              formulimit të programit të plotë shtetëror shqiptar.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1911 — Kongresi i Janinës -->
+      <div class="tl-item reveal" style="transition-delay:0.64s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1911</div>
+        <div class="tl-content">
+          <div class="tl-year">1911</div>
+          <div class="tl-title">Kongresi i Janinës</div>
+          <div class="tl-short">Koordinim politik mes drejtuesve shqiptarë.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Kongresi i Janinës (1911) forcoi bashkëpunimin mes udhëheqësve shqiptarë
+              të jugut dhe veriut. Diskutimet u fokusuan në strategjinë e përbashkët
+              kundër copëtimit të mëtejshëm të trojeve dhe koordinimin e kryengritjeve
+              të armatosura.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1912 — Kuvendi i Junikut -->
+      <div class="tl-item reveal" style="transition-delay:0.72s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1912</div>
+        <div class="tl-content">
+          <div class="tl-year">1912</div>
+          <div class="tl-title">Kuvendi i Junikut</div>
+          <div class="tl-short">Organizimi i kryengritjes së përgjithshme.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Kuvendi i Junikut (gusht 1912) planifikoi kryengritjen e përgjithshme
+              kundër Perandorisë Osmane. Drejtuar nga Isa Boletini dhe Hasan Prishtina,
+              forcat kryengritëse morën kontrollin e Shkupit dhe Manastirit, duke i
+              detyruar osmanët të pranojnë kërkesat shqiptare — hap vendimtar drejt
+              pavarësisë.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1912 — Kuvendi i Vlorës -->
+      <div class="tl-item reveal" style="transition-delay:0.80s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1912</div>
+        <div class="tl-content">
+          <div class="tl-year">1912</div>
+          <div class="tl-title">Kuvendi i Vlorës — Pavarësia</div>
+          <div class="tl-short">Shpallja e Pavarësisë së Shqipërisë, 28 Nëntor 1912.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Më 28 nëntor 1912, Kuvendi Kombëtar në Vlorë, i kryesuar nga
+              <strong>Ismail Qemali</strong>, shpalli Pavarësinë e Shqipërisë dhe
+              formoi qeverinë e parë kombëtare. U ngrit flamuri me shqiponjë të zezë
+              dykrenare — simbol i kombit — realizim i ëndrrës së gjeneratave të Rilindjes.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1913 — Kongresi i Triestes -->
+      <div class="tl-item reveal" style="transition-delay:0.88s" onclick="toggleTimeline(this)">
+        <div class="tl-dot">1913</div>
+        <div class="tl-content">
+          <div class="tl-year">1913</div>
+          <div class="tl-title">Kongresi i Triestes</div>
+          <div class="tl-short">Mbështetje ndërkombëtare për shtetin e ri shqiptar.</div>
+          <div class="tl-expand">
+            <div class="tl-expand-inner">
+              Kongresi i Triestes (1913) u fokusua në njohjen ndërkombëtare dhe mbrojtjen
+              e shtetit të ri shqiptar. Patriotët e diasporës dhe diplomatët shqiptarë
+              punonin intensivisht në arenën evropiane për të siguruar kufijtë dhe
+              sovranitetin e Shqipërisë para Fuqive të Mëdha.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     4b. FIGURAT HISTORIKE
+============================================================ -->
+<section id="figures">
+  <div class="section-inner">
+
+    <div class="reveal">
+      <p class="section-label">Seksioni III-b</p>
+      <h2 class="section-title">Figurat Historike të <span class="gold">Rilindjes Kombëtare</span></h2>
+      <p class="section-lead">
+        Personalitetet që formësuan fatin e kombit shqiptar — nga pena deri
+        tek shpata, nga foltorja deri tek diaspora.
+      </p>
+    </div>
+
+    <!-- Category filter tabs -->
+    <div class="fig-tabs reveal">
+      <button class="fig-tab active" onclick="filterFigures('all', this)">Të Gjithë</button>
+      <button class="fig-tab" onclick="filterFigures('writers', this)">Shkrimtarë & Ideologë</button>
+      <button class="fig-tab" onclick="filterFigures('education', this)">Arsim & Kulturë</button>
+      <button class="fig-tab" onclick="filterFigures('political', this)">Politikë & Ushtri</button>
+      <button class="fig-tab" onclick="filterFigures('diaspora', this)">Diaspora</button>
+    </div>
+
+    <!-- Cards grid -->
+    <div class="fig-grid" id="fig-grid">
+
+      <!-- WRITERS & IDEOLOGISTS -->
+      <div class="fig-card visible reveal" data-cat="writers" style="transition-delay:0.05s">
+        <div class="fig-cat-badge">Shkrimtarë</div>
+        <div class="fig-avatar">✍</div>
+        <div class="fig-name">Sami Frashëri</div>
+        <div class="fig-role">Ideolog i Nacionalizmit Shqiptar</div>
+        <p class="fig-desc">Autor i veprës themelore <em>"Shqipëria — ç'ka qenë, ç'është e ç'do të bëhetë"</em>. Vizionari kryesor i programit kombëtar shqiptar.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="writers" style="transition-delay:0.10s">
+        <div class="fig-cat-badge">Shkrimtarë</div>
+        <div class="fig-avatar">📜</div>
+        <div class="fig-name">Naim Frashëri</div>
+        <div class="fig-role">Poeti Kombëtar</div>
+        <p class="fig-desc">Promovoi identitetin shqiptar nëpërmjet poezisë. Vepra e tij <em>"Bagëti e Bujqësia"</em> dhe <em>"Histori e Skënderbeut"</em> frymëzuan brezat.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="writers" style="transition-delay:0.15s">
+        <div class="fig-cat-badge">Shkrimtarë</div>
+        <div class="fig-avatar">🕊</div>
+        <div class="fig-name">Pashko Vasa</div>
+        <div class="fig-role">Avokat i Unitetit Kombëtar</div>
+        <p class="fig-desc">Autor i poemës <em>"O moj Shqypni"</em> me vargjet e pavdekshme mbi unitetin. Promovoi bashkimin e shqiptarëve mbi dallimet fetare.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="writers" style="transition-delay:0.20s">
+        <div class="fig-cat-badge">Shkrimtarë</div>
+        <div class="fig-avatar">📖</div>
+        <div class="fig-name">Kostandin Kristoforidhi</div>
+        <div class="fig-role">Kontribues i Zhvillimit të Gjuhës</div>
+        <p class="fig-desc">Përktheu Biblën në shqip dhe hartoi fjalor të rëndësishëm shqip–greqisht–latinisht. Kontributi i tij gjuhësor është i pazëvendësueshëm.</p>
+      </div>
+
+      <!-- EDUCATION & CULTURE -->
+      <div class="fig-card visible reveal" data-cat="education" style="transition-delay:0.25s">
+        <div class="fig-cat-badge">Arsim</div>
+        <div class="fig-avatar">🎓</div>
+        <div class="fig-name">Ndre Mjeda</div>
+        <div class="fig-role">Gjuhëtar dhe Arsimtar</div>
+        <p class="fig-desc">Poet dhe gjuhëtar gegërishtes. Kontributi i tij gjuhësor dhe letrar mbështeti zhvillimin e kulturës kombëtare shqiptare.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="education" style="transition-delay:0.30s">
+        <div class="fig-cat-badge">Arsim</div>
+        <div class="fig-avatar">🏫</div>
+        <div class="fig-name">Luigj Gurakuqi</div>
+        <div class="fig-role">Figurë Kyçe në Arsim dhe Politikë</div>
+        <p class="fig-desc">Ndër organizatorët e Kongresit të Manastirit dhe promovues të arsimit shqip. Ministër i parë i Arsimit i Shqipërisë së pavarur.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="education" style="transition-delay:0.35s">
+        <div class="fig-cat-badge">Arsim</div>
+        <div class="fig-avatar">🔬</div>
+        <div class="fig-name">Aleksandër Xhuvani</div>
+        <div class="fig-role">Studiues i Gjuhës Shqipe</div>
+        <p class="fig-desc">Gjuhëtar i shquar, studioi etimologjinë dhe historinë e gjuhës shqipe. Kontribuoi në standardizimin e gjuhës letrare kombëtare.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="education" style="transition-delay:0.40s">
+        <div class="fig-cat-badge">Arsim</div>
+        <div class="fig-avatar">⚔</div>
+        <div class="fig-name">Gjergj Fishta</div>
+        <div class="fig-role">Shkrimtar dhe Figurë Kombëtare</div>
+        <p class="fig-desc">Autor i eposit <em>"Lahuta e Malsisë"</em>, vepra epike më e madhe e letërsisë shqipe. Aktivist i çështjes kombëtare në Kongresin e Parisit.</p>
+      </div>
+
+      <!-- POLITICAL & MILITARY -->
+      <div class="fig-card visible reveal" data-cat="political" style="transition-delay:0.45s">
+        <div class="fig-cat-badge">Politikë</div>
+        <div class="fig-avatar">🏛</div>
+        <div class="fig-name">Ismail Qemali</div>
+        <div class="fig-role">Lider i Pavarësisë</div>
+        <p class="fig-desc">Kryetar i Kuvendit të Vlorës dhe ngriti flamurin kombëtar më 28 nëntor 1912. Kryeministri i parë i Shqipërisë së pavarur.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="political" style="transition-delay:0.50s">
+        <div class="fig-cat-badge">Ushtri</div>
+        <div class="fig-avatar">🗡</div>
+        <div class="fig-name">Isa Boletini</div>
+        <div class="fig-role">Luftëtar Kombëtar</div>
+        <p class="fig-desc">Komandant ushtarak dhe simbol i rezistencës shqiptare në Kosovë. Udhëhoqi forcat kryengritëse në betejat vendimtare të 1912.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="political" style="transition-delay:0.55s">
+        <div class="fig-cat-badge">Politikë</div>
+        <div class="fig-avatar">🌟</div>
+        <div class="fig-name">Hasan Prishtina</div>
+        <div class="fig-role">Organizator i Kryengritjeve</div>
+        <p class="fig-desc">Deputet dhe organizator kryesor i kryengritjes së 1912 në Kosovë. Bashkëpunoi ngushtë me Isa Boletinin për çlirimin e trojeve shqiptare.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="political" style="transition-delay:0.60s">
+        <div class="fig-cat-badge">Ushtri</div>
+        <div class="fig-avatar">🦅</div>
+        <div class="fig-name">Bajram Curri</div>
+        <div class="fig-role">Lider Nationalist</div>
+        <p class="fig-desc">Komandant i lëvizjes kombëtare, kundërshtoi çdo kompromis ndaj integritetit territorial. Simbol i rezistencës së armatosur shqiptare.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="political" style="transition-delay:0.65s">
+        <div class="fig-cat-badge">Politikë</div>
+        <div class="fig-avatar">🌍</div>
+        <div class="fig-name">Abdyl Frashëri</div>
+        <div class="fig-role">Kryetar i Lidhjes së Prizrenit</div>
+        <p class="fig-desc">Vëllai politik i familjes Frashëri. Udhëhoqi Lidhjen e Prizrenit dhe negocioi me fuqitë evropiane për mbrojtjen e trojeve shqiptare.</p>
+      </div>
+
+      <!-- DIASPORA -->
+      <div class="fig-card visible reveal" data-cat="diaspora" style="transition-delay:0.70s">
+        <div class="fig-cat-badge">Diaspora</div>
+        <div class="fig-avatar">🎭</div>
+        <div class="fig-name">Fan Noli</div>
+        <div class="fig-role">Politikan dhe Intelektual</div>
+        <p class="fig-desc">Themelues i Kishës Ortodokse Autoqefale Shqiptare në Amerikë. Kryeministër i Shqipërisë (1924) dhe përkthyes i Shekspirit në shqip.</p>
+      </div>
+
+      <div class="fig-card visible reveal" data-cat="diaspora" style="transition-delay:0.75s">
+        <div class="fig-cat-badge">Diaspora</div>
+        <div class="fig-avatar">📰</div>
+        <div class="fig-name">Faik Konica</div>
+        <div class="fig-role">Diplomat dhe Shkrimtar</div>
+        <p class="fig-desc">Themelues i revistës <em>"Albania"</em> në Bruksel. Ambasador i Shqipërisë në SHBA dhe ndër diplomatët më të zotë të çështjes shqiptare.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     5. GALERIA
+============================================================ -->
+<section id="galeria">
+  <div class="section-inner">
+
+    <div class="reveal">
+      <p class="section-label">Seksioni IV</p>
+      <h2 class="section-title">Galeria <span class="gold">Historike</span></h2>
+      <p class="section-lead">Klikoni mbi një imazh për ta parë të zgjeruar.</p>
+    </div>
+
+    <div class="gallery-grid" id="gallery-grid">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <img id="modal-img" src="" alt="" />
+    <div class="modal-info">
+      <div>
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-subtitle" id="modal-subtitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     6. QUIZ
+============================================================ -->
+<section id="quiz">
+  <div class="section-inner">
+
+    <div class="reveal">
+      <p class="section-label">Seksioni V</p>
+      <h2 class="section-title">Quiz <span class="gold">Historik</span></h2>
+      <p class="section-lead">Testoni njohuritë tuaja mbi Rilindjen Kombëtare Shqiptare.</p>
+    </div>
+
+    <div class="quiz-box reveal">
+
+      <!-- Progress -->
+      <div class="quiz-progress-wrap">
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="quiz-fill" style="width:0%"></div>
+        </div>
+        <div class="quiz-progress-label" id="quiz-counter">1 / 5</div>
+      </div>
+
+      <!-- Question wrapper -->
+      <div class="quiz-question-wrap" id="quiz-qwrap">
+        <div class="quiz-q-num" id="quiz-qnum">Pyetja 1</div>
+        <div class="quiz-q-text" id="quiz-qtext"></div>
+        <div class="quiz-options" id="quiz-opts"></div>
+        <div class="quiz-feedback" id="quiz-fb"></div>
+      </div>
+
+      <!-- Result (hidden initially) -->
+      <div class="quiz-result quiz-question-wrap" id="quiz-result">
+        <div class="result-score" id="result-score">0/5</div>
+        <div class="result-label" id="result-label"></div>
+        <p class="result-msg" id="result-msg"></p>
+        <button class="btn-retry" onclick="restartQuiz()">Provo Sërish</button>
+      </div>
+
+      <!-- Next button -->
+      <div class="quiz-nav">
+        <button class="btn-next" id="btn-next" onclick="nextQuestion()" disabled>
+          Vazhdo →
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <span class="footer-eagle">🦅</span>
+  <div class="footer-title">RILINDJA KOMBËTARE SHQIPTARE</div>
+  <div class="footer-sub">1878 — 1912 · Nga Lidhja e Prizrenit deri tek Pavarësia</div>
+  <div class="footer-divider"></div>
+  <div class="footer-author">
+    Krijuar me dashuri për historinë shqiptare &nbsp;·&nbsp;
+    <span>© 2025</span> · Të gjitha të drejtat e rezervuara
+  </div>
+</footer>
+
+<!-- Back to top -->
+<button id="back-top" aria-label="Kthehu lart" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+"use strict";
+
+/* ============================================================
+   0. SMOOTH SCROLL — fallback për të gjitha link-et anchor
+============================================================ */
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    const navH = document.getElementById('navbar').offsetHeight;
+    const top = target.getBoundingClientRect().top + window.scrollY - navH - 10;
+    window.scrollTo({ top, behavior: 'smooth' });
+    closeMenu();
+  });
+});
+
+/* ============================================================
+   1. SCROLL PROGRESS BAR
+============================================================ */
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  progressBar.style.width = pct + '%';
+});
+
+/* ============================================================
+   2. NAVBAR SHRINK ON SCROLL
+============================================================ */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+/* ============================================================
+   3. HAMBURGER MENU
+============================================================ */
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('nav-links').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('nav-links').classList.remove('open');
+}
+
+/* ============================================================
+   4. SCROLL REVEAL (IntersectionObserver)
+============================================================ */
+const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('revealed');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+revealEls.forEach(el => observer.observe(el));
+
+/* ============================================================
+   5. BACK TO TOP
+============================================================ */
+const backTop = document.getElementById('back-top');
+window.addEventListener('scroll', () => {
+  backTop.classList.toggle('visible', window.scrollY > 500);
+});
+
+/* ============================================================
+   6. ACCORDION
+============================================================ */
+function toggleAccordion(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.accordion-body.open').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.accordion-btn.active').forEach(b => b.classList.remove('active'));
+
+  if (!isOpen) {
+    body.classList.add('open');
+    btn.classList.add('active');
+  }
+}
+
+/* ============================================================
+   7. TIMELINE EXPAND — me animacion opacity
+============================================================ */
+function toggleTimeline(item) {
+  const expand  = item.querySelector('.tl-expand');
+  const isOpen  = expand.classList.contains('open');
+
+  // Mbyll të gjitha
+  document.querySelectorAll('.tl-expand.open').forEach(e => {
+    e.classList.remove('open');
+    e.style.maxHeight = '0';
+    e.style.opacity   = '0';
+  });
+  document.querySelectorAll('.tl-item.active').forEach(i => i.classList.remove('active'));
+
+  if (!isOpen) {
+    expand.classList.add('open');
+    expand.style.maxHeight = expand.scrollHeight + 'px';
+    expand.style.opacity   = '1';
+    item.classList.add('active');
+  }
+}
+
+/* ============================================================
+   8. FIGURES FILTER — filtro sipas kategorisë
+============================================================ */
+function filterFigures(cat, btn) {
+  // Update active tab
+  document.querySelectorAll('.fig-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.fig-card');
+  cards.forEach((card, i) => {
+    const match = cat === 'all' || card.dataset.cat === cat;
+    if (match) {
+      card.style.display = 'block';
+      // Staggered fade-in
+      card.style.opacity   = '0';
+      card.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        card.style.opacity    = '1';
+        card.style.transform  = 'translateY(0)';
+      }, i * 50);
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+/* ============================================================
+   8. GALLERY — generate placeholder cards with SVG images
+============================================================ */
+const galleryData = [
+  { title: 'Lidhja e Prizrenit', year: '1878', color: '#8B0A1E', icon: '⚔', desc: 'Mbledhja themelore' },
+  { title: 'Flamuri Shqiptar', year: '1912', color: '#C8102E', icon: '🦅', desc: 'Simboli kombëtar' },
+  { title: 'Kongresi i Manastirit', year: '1908', color: '#5A3010', icon: '📜', desc: 'Alfabeti shqip' },
+  { title: 'Naim Frashëri', year: '1820–1882', color: '#1A3A6A', icon: '✍', desc: 'Poeti kombëtar' },
+  { title: 'Ismail Qemali', year: '1912', color: '#2A1A4A', icon: '🏛', desc: 'Kreu i qeverisë' },
+  { title: 'Shpallja e Pavarësisë', year: '28 Nëntor 1912', color: '#6A1A1A', icon: '🎺', desc: 'Vlora, 1912' },
+];
+
+const grid = document.getElementById('gallery-grid');
+
+galleryData.forEach((item, i) => {
+  // Create an SVG-based placeholder image
+  const svgContent = `
+    <svg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'>
+      <defs>
+        <radialGradient id='g${i}' cx='50%' cy='40%' r='60%'>
+          <stop offset='0%' stop-color='${item.color}' stop-opacity='0.8'/>
+          <stop offset='100%' stop-color='#0D0D0D' stop-opacity='1'/>
+        </radialGradient>
+        <pattern id='p${i}' x='0' y='0' width='20' height='20' patternUnits='userSpaceOnUse'>
+          <line x1='0' y1='0' x2='20' y2='20' stroke='white' stroke-width='0.3' stroke-opacity='0.08'/>
+        </pattern>
+      </defs>
+      <rect width='400' height='300' fill='url(#g${i})'/>
+      <rect width='400' height='300' fill='url(#p${i})'/>
+      <text x='200' y='130' font-size='64' text-anchor='middle' dominant-baseline='middle'>${item.icon}</text>
+      <text x='200' y='185' font-family='Georgia,serif' font-size='18' font-weight='bold'
+            fill='white' text-anchor='middle' opacity='0.9'>${item.title}</text>
+      <text x='200' y='212' font-family='Georgia,serif' font-size='13'
+            fill='#C9A84C' text-anchor='middle' opacity='0.8'>${item.year}</text>
+    </svg>`;
+
+  const dataUri = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgContent)));
+
+  const div = document.createElement('div');
+  div.className = 'gallery-item reveal';
+  div.style.transitionDelay = (i * 0.08) + 's';
+  div.innerHTML = `
+    <img src="${dataUri}" alt="${item.title}" loading="lazy"/>
+    <div class="gallery-overlay">
+      <div class="gallery-caption">${item.title} · ${item.year}</div>
+    </div>`;
+
+  div.addEventListener('click', () => openModal(dataUri, item.title, item.desc + ' · ' + item.year));
+  grid.appendChild(div);
+
+  // Observe for scroll reveal
+  observer.observe(div);
+});
+
+/* ============================================================
+   9. MODAL
+============================================================ */
+function openModal(src, title, subtitle) {
+  document.getElementById('modal-img').src = src;
+  document.getElementById('modal-img').alt = title;
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-subtitle').textContent = subtitle;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Close on backdrop click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+// Close on Escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ============================================================
+   10. QUIZ
+============================================================ */
+const questions = [
+  {
+    q: "Kur u themelua Lidhja Shqiptare e Prizrenit?",
+    opts: ["10 qershor 1878", "28 nëntor 1912", "14 nëntor 1908", "15 mars 1881"],
+    correct: 0,
+    explanation: "Lidhja u themelua më 10 qershor 1878 si reagim ndaj Traktatit të San Stefanos."
+  },
+  {
+    q: "Cili poet quhet 'Poeti Kombëtar' i shqiptarëve?",
+    opts: ["Gjergj Fishta", "Faik Konica", "Naim Frashëri", "Jeronim de Rada"],
+    correct: 2,
+    explanation: "Naim Frashëri (1820–1882) titullohet Poeti Kombëtar i shqiptarëve."
+  },
+  {
+    q: "Ku u shpall Pavarësia e Shqipërisë më 28 Nëntor 1912?",
+    opts: ["Prizren", "Shkodër", "Tiranë", "Vlorë"],
+    correct: 3,
+    explanation: "Ismail Qemali shpalli Pavarësinë në Vlorë, ku u ngrit edhe flamuri kombëtar."
+  },
+  {
+    q: "Çfarë vendosi Kongresi i Manastirit (1908)?",
+    opts: ["Pavarësinë e Shqipërisë", "Unifikimin e alfabetit shqip", "Themelimin e ushtrisë", "Ndarjen administrative"],
+    correct: 1,
+    explanation: "Kongresi i Manastirit (14–22 nëntor 1908) vendosi alfabetin latin si standard për gjuhën shqipe."
+  },
+  {
+    q: "Cili ishte parimi i famshëm i Rilindjes Kombëtare lidhur me fenë?",
+    opts: [
+      "Feja para kombit",
+      "Feja e shqiptarit është shqiptaria",
+      "Kombi pa fe",
+      "Besimi është forca"
+    ],
+    correct: 1,
+    explanation: "Parimi 'Feja e shqiptarit është shqiptaria' ishte bazë e unitetit kombëtar mbi dallimet fetare."
+  }
+];
+
+let currentQ = 0;
+let score = 0;
+let answered = false;
+
+function loadQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('quiz-qnum').textContent = 'Pyetja ' + (currentQ + 1);
+  document.getElementById('quiz-qtext').textContent = q.q;
+  document.getElementById('quiz-fb').textContent = '';
+  document.getElementById('btn-next').disabled = true;
+
+  // Progress
+  const pct = (currentQ / questions.length) * 100;
+  document.getElementById('quiz-fill').style.width = pct + '%';
+  document.getElementById('quiz-counter').textContent = (currentQ + 1) + ' / ' + questions.length;
+
+  // Options
+  const optsEl = document.getElementById('quiz-opts');
+  optsEl.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => selectAnswer(i, btn));
+    optsEl.appendChild(btn);
+  });
+
+  answered = false;
+}
+
+function selectAnswer(idx, btn) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[currentQ];
+  const allBtns = document.querySelectorAll('.quiz-opt');
+
+  allBtns.forEach(b => b.disabled = true);
+
+  if (idx === q.correct) {
+    btn.classList.add('correct');
+    document.getElementById('quiz-fb').textContent = '✓ Sakt! ' + q.explanation;
+    document.getElementById('quiz-fb').style.color = '#7ae09a';
+    score++;
+  } else {
+    btn.classList.add('wrong');
+    allBtns[q.correct].classList.add('correct');
+    document.getElementById('quiz-fb').textContent = '✗ Jo sakt. ' + q.explanation;
+    document.getElementById('quiz-fb').style.color = '#ff7a8a';
+  }
+
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQuestion() {
+  if (!answered && currentQ < questions.length) return;
+  currentQ++;
+
+  if (currentQ >= questions.length) {
+    showResult();
+  } else {
+    loadQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz-qwrap').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'none';
+
+  const result = document.getElementById('quiz-result');
+  result.classList.add('show');
+
+  const pct = score / questions.length;
+  document.getElementById('result-score').textContent = score + '/' + questions.length;
+  document.getElementById('quiz-fill').style.width = '100%';
+
+  let label, msg;
+  if (pct === 1) {
+    label = '🏆 Perfekt!';
+    msg = 'Bravo! Ju i dini shumë mirë historinë shqiptare!';
+  } else if (pct >= 0.6) {
+    label = '👏 Shumë mirë!';
+    msg = 'Keni njohuri të mira historike. Vazhdoni të studioni!';
+  } else {
+    label = '📖 Mund ta bëni më mirë!';
+    msg = 'Lexoni seksionet e mësipërme dhe provoni sërish!';
+  }
+  document.getElementById('result-label').textContent = label;
+  document.getElementById('result-msg').textContent = msg;
+}
+
+function restartQuiz() {
+  currentQ = 0;
+  score = 0;
+  answered = false;
+
+  document.getElementById('quiz-qwrap').style.display = 'flex';
+  document.getElementById('btn-next').style.display = 'block';
+  document.getElementById('quiz-result').classList.remove('show');
+
+  loadQuestion();
+}
+
+// Init quiz on load
+loadQuestion();
+
+</script>
+</body>
+</html>      background: var(--black);
       color: var(--white);
       font-family: var(--font-body);
       line-height: 1.75;
